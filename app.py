@@ -29,7 +29,7 @@ except ImportError:
 # FLASK APP CONFIG
 # ─────────────────────────────────────────────
 app = Flask(__name__)
-app.config['SECRET_KEY']            = os.environ.get('SECRET_KEY', 'deepscan-secret-2024')
+app.config['SECRET_KEY']            = os.environ.get('SECRET_KEY', 'deepscan-secret-2026')
 app.config['UPLOAD_FOLDER']         = 'static/uploads'
 app.config['MAX_CONTENT_LENGTH']    = 16 * 1024 * 1024   # 16 MB
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'webp', 'bmp'}
