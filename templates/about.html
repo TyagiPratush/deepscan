@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — DeepScan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0a0a0f; --surface:#12121a; --border:#1e1e2e;
+    --accent-real:#00e5a0; --accent-fake:#ff3c6e; --accent-blue:#4d9fff;
+    --text:#e8e8f0; --muted:#6b6b8a; --card:#16161f;
+  }
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'Syne',sans-serif; min-height:100vh; }
+  body::before {
+    content:''; position:fixed; inset:0;
+    background-image:
+      linear-gradient(rgba(77,159,255,0.04) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(77,159,255,0.04) 1px,transparent 1px);
+    background-size:40px 40px; pointer-events:none; z-index:0;
+  }
+  nav {
+    position:sticky; top:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:1rem 2.5rem; background:rgba(10,10,15,0.9);
+    backdrop-filter:blur(16px); border-bottom:1px solid var(--border);
+  }
+  .logo { font-family:'Space Mono',monospace; font-weight:700; font-size:1.15rem;
+          color:var(--text); text-decoration:none; }
+  .logo span { color:var(--accent-blue); }
+  nav ul { list-style:none; display:flex; gap:2rem; }
+  nav a { color:var(--muted); text-decoration:none; font-size:0.85rem; font-weight:600;
+          letter-spacing:0.06em; text-transform:uppercase; transition:color 0.2s; }
+  nav a:hover, nav a.active { color:var(--text); }
+
+  .page { position:relative; z-index:1; max-width:820px; margin:4rem auto; padding:0 1.5rem 6rem; }
+  h2 { font-size:2.5rem; font-weight:800; letter-spacing:-0.03em; margin-bottom:1.2rem; }
+  .lead { color:var(--muted); line-height:1.8; font-size:0.98rem; margin-bottom:3rem; max-width:640px; }
+
+  h3 { font-size:1rem; font-weight:700; letter-spacing:-0.01em;
+       margin-bottom:1rem; color:var(--text); }
+
+  /* Pipeline cards */
+  .pipeline { display:grid; grid-template-columns:repeat(auto-fit,minmax(175px,1fr));
+              gap:1rem; margin-bottom:3rem; }
+  .pipe-card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:12px; padding:1.4rem;
+  }
+  .pipe-num {
+    font-family:'Space Mono',monospace; font-size:0.62rem;
+    color:var(--accent-blue); font-weight:700; letter-spacing:0.1em;
+    margin-bottom:0.6rem;
+  }
+  .pipe-card h4 { font-size:0.95rem; font-weight:700; margin-bottom:0.4rem; }
+  .pipe-card p  { color:var(--muted); font-size:0.8rem; line-height:1.6; }
+
+  /* Stack table */
+  .tbl-wrap { border-radius:10px; border:1px solid var(--border);
+              overflow:hidden; margin-bottom:3rem; }
+  table { width:100%; border-collapse:collapse; }
+  thead th {
+    text-align:left; padding:0.7rem 1rem;
+    font-family:'Space Mono',monospace; font-size:0.62rem;
+    font-weight:700; text-transform:uppercase; letter-spacing:0.12em;
+    color:var(--muted); background:var(--surface);
+    border-bottom:1px solid var(--border);
+  }
+  tbody tr { border-bottom:1px solid var(--border); }
+  tbody tr:last-child { border-bottom:none; }
+  tbody tr:hover { background:var(--card); }
+  td { padding:0.85rem 1rem; font-size:0.82rem; }
+  td:first-child { font-weight:700; color:var(--accent-blue); width:180px; }
+  td:nth-child(2) { font-family:'Space Mono',monospace; font-size:0.78rem; }
+  td:last-child { color:var(--muted); font-size:0.78rem; }
+
+  /* Weight bar */
+  .weight-row { display:flex; align-items:center; gap:1rem; margin-bottom:0.6rem; }
+  .w-label { font-family:'Space Mono',monospace; font-size:0.72rem;
+             color:var(--muted); min-width:120px; }
+  .w-bar-bg { flex:1; height:6px; background:var(--border); border-radius:3px; overflow:hidden; }
+  .w-bar-fill { height:100%; border-radius:3px; background:var(--accent-blue); }
+  .w-pct { font-family:'Space Mono',monospace; font-size:0.72rem;
+           color:var(--accent-blue); min-width:30px; text-align:right; }
+
+  footer {
+    position:relative; z-index:1; text-align:center; padding:1.75rem;
+    font-family:'Space Mono',monospace; font-size:0.68rem;
+    color:var(--muted); border-top:1px solid var(--border);
+  }
+  @media(max-width:560px){ nav ul{display:none;} }
+</style>
+</head>
+<body>
+<nav>
+  <a class="logo" href="/">Deep<span>Scan</span></a>
+  <ul>
+    <li><a href="/">Detect</a></li>
+    <li><a href="/history">History</a></li>
+    <li><a href="/about" class="active">About</a></li>
+  </ul>
+</nav>
+
+<div class="page">
+  <h2>How DeepScan Works</h2>
+  <p class="lead">
+    DeepScan uses a four-signal ensemble combining deep learning, error level analysis,
+    noise forensics, and frequency domain analysis to detect AI-generated or
+    digitally manipulated images — no single method is relied upon alone.
+  </p>
+
+  <h3>Detection Pipeline</h3>
+  <div class="pipeline">
+    <div class="pipe-card">
+      <div class="pipe-num">STEP 01</div>
+      <h4>CNN Inference</h4>
+      <p>A PyTorch Convolutional Neural Network processes the full image and outputs a raw manipulation probability score.</p>
+    </div>
+    <div class="pipe-card">
+      <div class="pipe-num">STEP 02</div>
+      <h4>ELA Analysis</h4>
+      <p>Error Level Analysis re-compresses the JPEG and highlights regions with inconsistent compression artifacts — common in edited images.</p>
+    </div>
+    <div class="pipe-card">
+      <div class="pipe-num">STEP 03</div>
+      <h4>Noise Forensics</h4>
+      <p>OpenCV detects unnatural Gaussian noise distributions that are characteristic of GAN-generated images.</p>
+    </div>
+    <div class="pipe-card">
+      <div class="pipe-num">STEP 04</div>
+      <h4>DCT Frequency</h4>
+      <p>Discrete Cosine Transform analysis reveals anomalous high-frequency patterns introduced by AI upsampling algorithms.</p>
+    </div>
+  </div>
+
+  <h3>Signal Weighting</h3>
+  <div style="margin-bottom:2.5rem;">
+    <div class="weight-row">
+      <span class="w-label">CNN Score</span>
+      <div class="w-bar-bg"><div class="w-bar-fill" style="width:40%"></div></div>
+      <span class="w-pct">40%</span>
+    </div>
+    <div class="weight-row">
+      <span class="w-label">ELA Score</span>
+      <div class="w-bar-bg"><div class="w-bar-fill" style="width:30%"></div></div>
+      <span class="w-pct">30%</span>
+    </div>
+    <div class="weight-row">
+      <span class="w-label">Noise Score</span>
+      <div class="w-bar-bg"><div class="w-bar-fill" style="width:20%"></div></div>
+      <span class="w-pct">20%</span>
+    </div>
+    <div class="weight-row">
+      <span class="w-label">Freq Score</span>
+      <div class="w-bar-bg"><div class="w-bar-fill" style="width:10%"></div></div>
+      <span class="w-pct">10%</span>
+    </div>
+    <p style="color:var(--muted);font-size:0.8rem;margin-top:0.8rem;line-height:1.7;">
+      Final score ≥ 0.50 → <strong style="color:var(--accent-fake)">FAKE</strong> &nbsp;|&nbsp;
+      Final score &lt; 0.50 → <strong style="color:var(--accent-real)">REAL</strong> &nbsp;·&nbsp;
+      Confidence = distance from the 0.50 threshold.
+    </p>
+  </div>
+
+  <h3>Technology Stack</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Layer</th><th>Technology</th><th>Purpose</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Web Backend</td><td>Flask + Gunicorn</td><td>REST API, routing, Jinja2 templating</td></tr>
+        <tr><td>Alt Interface</td><td>Streamlit</td><td>Rapid data-science UI</td></tr>
+        <tr><td>Desktop GUI</td><td>Tkinter</td><td>Native Windows/Mac/Linux app</td></tr>
+        <tr><td>Deep Learning</td><td>PyTorch CNN</td><td>Image feature extraction &amp; classification</td></tr>
+        <tr><td>Image Analysis</td><td>OpenCV + Pillow</td><td>ELA, noise forensics, preprocessing</td></tr>
+        <tr><td>Numerics</td><td>NumPy</td><td>Matrix operations, score aggregation</td></tr>
+        <tr><td>Visualisation</td><td>Matplotlib</td><td>Training curves (Accuracy vs Loss)</td></tr>
+        <tr><td>Database</td><td>SQLite / MySQL</td><td>Persistent detection history</td></tr>
+        <tr><td>Hosting</td><td>Render (free tier)</td><td>Cloud deployment via GitHub</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Training the CNN</h3>
+  <p style="color:var(--muted);font-size:0.88rem;line-height:1.8;">
+    The included CNN ships with random weights. To get real predictions, collect a labelled dataset
+    (e.g. FaceForensics++, DFDC, or CASIA), run <code style="color:var(--accent-blue)">train_model.py</code>,
+    and set the environment variable <code style="color:var(--accent-blue)">MODEL_PATH=best_model.pt</code>
+    before starting the server. The ELA, noise, and frequency signals are training-free and work immediately.
+  </p>
+</div>
+
+<footer>DeepScan &copy; 2024 &nbsp;·&nbsp; Multi-Signal Fake Image Detection</footer>
+</body>
+</html>
